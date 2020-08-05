@@ -5,7 +5,7 @@ let app = express();
 let countries = new CountriesService.CountriesService();
 
 app.get('/', function (req, res) {
-  res.send('Test path');
+  res.send('Hello from Continents and Countries Service');
 });
 
 app.get('/api/country/:contcode', function (req, res) {

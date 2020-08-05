@@ -1,7 +1,9 @@
 'use strict';
 import redisJson from 'redis-store-json'; 
 import redis from 'redis';
-//const client = redis.createClient ({host: 'redis-server', port: 6379});
+// const client = redis.createClient (
+//     {host: 'redis-server', port: 6379}
+//     );
 const client = redis.createClient ({port: 6379});
 redisJson.use(client);
 const KEY_TTL_SECONDS = 300;

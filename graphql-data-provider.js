@@ -2,7 +2,7 @@
 import fetch from 'isomorphic-fetch';
 import CacheHelper from './cache-helper.js';
 const GRAPHQL_DATA_URL = 'https://countries.trevorblades.com/';
-class CountriesDataProvider {
+class GraphQLDataProvider {
     constructor() {
         console.log('CountriesDataProvider ctor called');
         this.cacheHelper = new CacheHelper.CacheHelper();
@@ -73,5 +73,5 @@ class CountriesDataProvider {
 }
 
 export default {
-    CountriesDataProvider
+    GraphQLDataProvider: GraphQLDataProvider
 }; 

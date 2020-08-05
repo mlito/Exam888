@@ -1,9 +1,9 @@
 'use strict';
-import CountriesDataProvider from './countries-data-provider.js'
+import * as dpFactory from './data-provider-factory.js'
 class CountriesService  {
     constructor() {
       console.log('CountriesService ctor called');
-      this.dataProvider = new CountriesDataProvider.CountriesDataProvider();
+      this.dataProvider = dpFactory.createDataProvider(dpFactory.GRAPHQL_PROVIDER)//
     }
 
     getContinentCountries(continentCode, callback) {
