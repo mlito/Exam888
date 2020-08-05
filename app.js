@@ -23,6 +23,6 @@ app.get('/api/continents', function (req, res) {
   countries.getContinentsData(callback);
 });
 
-app.listen(3000, function () {
-  console.log('Start listening on port 3000');
+app.listen(8081, function () {
+  console.log('Start listening on port 8081');
 });
