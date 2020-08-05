@@ -1,6 +1,6 @@
 import express from 'express';
 import CountriesService from './countries-service.js';
-//var myreq = require('./coutries-service');
+
 let app = express();
 let countries = new CountriesService.CountriesService();
 
