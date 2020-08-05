@@ -23,6 +23,11 @@ app.get('/api/continents', function (req, res) {
   countries.getContinentsData(callback);
 });
 
+//all wrong routes go here
+app.get('/*', function(req, res) {
+  res.send('Wrong route');
+});
+
 app.listen(8081, function () {
   console.log('Start listening on port 8081');
 });

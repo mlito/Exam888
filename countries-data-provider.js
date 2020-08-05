@@ -5,7 +5,7 @@ const GRAPHQL_DATA_URL = 'https://countries.trevorblades.com/';
 class CountriesDataProvider {
     constructor() {
         console.log('CountriesDataProvider ctor called');
-        this.cacheHelper = new CacheHelper.CacheHelper(); 
+        this.cacheHelper = new CacheHelper.CacheHelper();
     }
 
     /*private methods*/
@@ -18,39 +18,58 @@ class CountriesDataProvider {
         return resultRequestBody;
     }
 
-    _getDataFromOutside(queryBody,callback) { 
-        let bodyToSend = JSON.stringify({query: queryBody} );
+    _handleFetchErrors(response) {
+        if (!response.ok) {
+            throw Error(response.statusText);
+        }
+        return response;
+    }
+
+    _processJsonResponse(resp, respCallBackOk, respCallBackError) {
+        console.log(resp);
+        if ((resp.data != null) &&
+            ((resp.data['continent'] != null) || (resp.data['continents'] != null))){
+            respCallBackOk(resp.data);
+        }
+        else {
+            respCallBackError({ 'error': 'Illegal request parameter' });
+        }
+    }
+
+    _getDataFromOutside(queryBody, callbackSuccess, callbackError) {
+        let bodyToSend = JSON.stringify({ query: queryBody });
         fetch(GRAPHQL_DATA_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: bodyToSend,
         })
-        .then(res =>res.json())
-        .then(res => callback(res.data))
+            .then(this._handleFetchErrors)
+            .then(res => res.json())
+            .then(res => this._processJsonResponse(res, callbackSuccess, callbackError));
     }
     /*end of private methods*/
-    getContinentsData(callback) { 
-        let queryBody = '{ continents { code name}} ';
-        this._getDataFromOutside(queryBody,callback);
-    }
 
-    
+    getContinentsData(responseCallBack) {
+        let queryBody = '{ continents { code name}} ';
+        /*in this case we don't add to cache - thus callbacks are same for ok and failed */
+        this._getDataFromOutside(queryBody, responseCallBack, responseCallBack);
+    }
 
     getCountriesForContinent(continentCode, callback) {
         let that = this;
-        let callbackForNonExists = function() {
+        let callbackForNonExists = function () {
             let queryBody = that._getCountriesQueryBody(continentCode);
-            let callbackForCache = function(inputData) {
-                that.cacheHelper.addDataToCache(continentCode,inputData); 
+            let callbackReqOk = function (inputData) {
+                that.cacheHelper.addDataToCache(continentCode, inputData);
                 callback(inputData);
-            } 
-            that._getDataFromOutside(queryBody,callbackForCache);
+            }
+            that._getDataFromOutside(queryBody, callbackReqOk, callback);
         }
 
-        this.cacheHelper.checkDataByKey(continentCode,callback,callbackForNonExists);
+        this.cacheHelper.checkDataByKey(continentCode, callback, callbackForNonExists);
     }
 
-    
+
 }
 
 export default {
