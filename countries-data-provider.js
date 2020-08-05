@@ -34,22 +34,20 @@ class CountriesDataProvider {
         this._getDataFromOutside(queryBody,callback);
     }
 
+    
+
     getCountriesForContinent(continentCode, callback) {
-        let foundInCache = false;
-        if (foundInCache) {
-            //let dataFromCache = getDataFromCache; 
-            this.cacheHelper.addDataToCache();
-        }
-        else {
-            let queryBody = this._getCountriesQueryBody(continentCode);
-            let that = this;
+        let that = this;
+        let callbackForNonExists = function() {
+            let queryBody = that._getCountriesQueryBody(continentCode);
             let callbackForCache = function(inputData) {
                 that.cacheHelper.addDataToCache(continentCode,inputData); 
-                //that.cacheHelper.setKeyExpiration(continentCode);
                 callback(inputData);
             } 
-            this._getDataFromOutside(queryBody,callbackForCache);
+            that._getDataFromOutside(queryBody,callbackForCache);
         }
+
+        this.cacheHelper.checkDataByKey(continentCode,callback,callbackForNonExists);
     }
 
     
