@@ -45,7 +45,8 @@ class GraphQLDataProvider {
         })
             .then(this._handleFetchErrors)
             .then(res => res.json())
-            .then(res => this._processJsonResponse(res, callbackSuccess, callbackError));
+            .then(res => this._processJsonResponse(res, callbackSuccess, callbackError))
+            .catch(err => callbackError({'error': err}));
     }
     /*end of private methods*/
 
