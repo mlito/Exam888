@@ -18,3 +18,5 @@ const client = redis.createClient ({host: 'redis-server', port: 6379});
 by 
 
 const client = redis.createClient ({port: 6379});
+
+added test str
